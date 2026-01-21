@@ -1,23 +1,30 @@
-from pyspark.sql import SparkSession
+from pyspark.sql import SparkSession #, functions as f
+from pyspark.sql.functions import input_file_name, when
 
-# Create Spark session
-spark = SparkSession.builder \
-                    .appName("CPT Codes Ingestion") \
-                    .getOrCreate()
+# Initialize Spark Session
+spark = (
+    SparkSession.builder
+    .appName("CPT Codes Ingestion")
+    .getOrCreate()
+)
 
-# configure variables
-BUCKET_NAME = "healthcare-bucket-22032025"
+# Google Cloud Storage (GCS) Configuration
+# SOURCE
+BUCKET_NAME = "healthcare-bucket-086"
 CPT_BUCKET_PATH = f"gs://{BUCKET_NAME}/landing/cptcodes/*.csv"
-BQ_TABLE = "avd-databricks-demo.bronze_dataset.cpt_codes"
+
+#DESTINATION
+BQ_TABLE = "fifth-trainer-484215-c7.bronze_dataset.cpt_codes"
+
 TEMP_GCS_BUCKET = f"{BUCKET_NAME}/temp/"
 
-# read from cpt
+# read from cpt source
 cptcodes_df = spark.read.csv(CPT_BUCKET_PATH, header=True)
 
-# replace spaces with underscore
 for col in cptcodes_df.columns:
-    new_col = col.replace(" ", "_").lower()
+    new_col = col.replace(" ","_").lower()
     cptcodes_df = cptcodes_df.withColumnRenamed(col, new_col)
+
 
 # write to bigquery
 (cptcodes_df.write
