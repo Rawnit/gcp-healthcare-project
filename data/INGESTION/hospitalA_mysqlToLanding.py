@@ -36,7 +36,7 @@ BQ_TEMP_PATH = f"{GCS_BUCKET}/temp/"
 
 # MySQL Configuration
 MYSQL_CONFIG = {
-    "url": "jdbc:mysql://35.222.242.255:3306/hospital_a_db?useSSL=false&allowPublicKeyRetrieval=true&connectTimeout=30000&socketTimeout=60000",
+    "url": "jdbc:mysql://35.222.242.255:3306/hospital_a_db?useSSL=true&allowPublicKeyRetrieval=true",
     "driver": "com.mysql.cj.jdbc.Driver",
     "user": "myuser",
     "password": "Warvickz191#"
